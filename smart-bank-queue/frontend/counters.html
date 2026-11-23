@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Counters - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><a href="index.html" class="logo">🏦 SmartBank</a><nav><a href="admin.html">Admin</a><a href="services.html">Services</a><a href="counters.html">Counters</a></nav></header>
+<main class="container">
+  <div class="page-title"><div><h1>Counter Management</h1><p>Assign services to counters.</p></div></div>
+  <div class="card form-card">
+    <label>Counter Number</label><input id="counterNumber" type="number" min="1" placeholder="1">
+    <label>Services</label><div id="serviceChecks" class="checks"></div>
+    <label>Status</label>
+    <select id="counterStatus"><option>Available</option><option>Busy</option><option>Offline</option></select>
+    <button onclick="saveCounter()">Add Counter</button>
+  </div>
+  <div class="card"><h2>Counters</h2><div id="counterTable" class="table-wrap"></div></div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/counters.js"></script>
+</body>
+</html>
