@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reports - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><a href="index.html" class="logo">🏦 SmartBank</a><nav><a href="admin.html">Admin</a><a href="reports.html">Reports</a></nav></header>
+<main class="container">
+  <div class="page-title"><div><h1>Daily Reports</h1><p>Today's queue performance.</p></div><button onclick="loadReport()">🔄 Refresh</button></div>
+  <div id="reportStats" class="stats-grid"></div>
+  <div class="card"><h2>Token History</h2><div id="history" class="table-wrap"></div></div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/reports.js"></script>
+</body>
+</html>

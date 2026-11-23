@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><a href="index.html" class="logo">🏦 SmartBank</a><nav><a href="customer.html">Customer</a><a href="staff.html">Staff</a><a href="admin.html">Admin</a></nav></header>
+<main class="container">
+  <div class="page-title"><div><h1>Get Your Token</h1><p>Select the service you need.</p></div></div>
+  <div class="card form-card">
+    <label>Customer Name</label>
+    <input id="name" placeholder="Enter your name">
+    <label>Mobile Number</label>
+    <input id="mobile" placeholder="Enter mobile number">
+    <label>Bank Service</label>
+    <select id="service"></select>
+    <label>Priority</label>
+    <select id="priority">
+  <option value="3">Normal</option>
+  <option value="2">Senior Citizen (ID required at counter)</option>
+  <option value="1">Disabled / Pregnant (ID required at counter)</option>
+</select>
+    <button onclick="generateToken()">Generate Token</button>
+  </div>
+  <div id="result" class="token-result hidden"></div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/customer.js"></script>
+</body>
+</html>
