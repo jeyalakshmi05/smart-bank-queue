@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">🏦 SmartBank</a>
+  <nav>
+    <a href="customer.html">Customer</a>
+    <a href="staff.html">Staff</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <div class="page-title">
+    <div>
+      <h1>Admin Dashboard</h1>
+      <p>Monitor and manage the bank queue.</p>
+    </div>
+  </div>
+
+  <div id="stats" class="stats-grid"></div>
+
+  <div class="quick-links">
+    <a href="services.html" class="card link-card">🧾 Manage Services</a>
+    <a href="counters.html" class="card link-card">🏢 Manage Counters</a>
+    <a href="reports.html" class="card link-card">📊 Reports</a>
+  </div>
+
+  <!-- Staff Management -->
+  <div class="card">
+    <h2>Staff Management</h2>
+    <p>Create staff accounts and assign bank counters.</p>
+
+    <form id="staffForm">
+
+      <label>Staff Name</label>
+      <input type="text" id="staffName" placeholder="Enter staff name" required>
+
+      <label>Email Address</label>
+      <input type="email" id="staffEmail" placeholder="Enter staff email" required>
+
+      <label>Password</label>
+      <input type="password" id="staffPassword" placeholder="Enter password" minlength="6" required>
+
+      <label>Assign Counter</label>
+      <select id="staffCounter" required>
+        <option value="">Select Counter</option>
+      </select>
+
+      <button type="submit">Create Staff Account</button>
+
+    </form>
+
+    <h3>Staff Members</h3>
+    <div id="staffList" class="table-wrap"></div>
+  </div>
+
+  <!-- Recent Tokens -->
+  <div class="card">
+    <h2>Recent Tokens</h2>
+    <div id="tokens" class="table-wrap"></div>
+  </div>
+
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

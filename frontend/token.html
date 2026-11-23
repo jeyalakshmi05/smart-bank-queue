@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Track Token - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">🏦 SmartBank</a>
+  <nav>
+    <a href="customer.html">Customer</a>
+    <a href="staff.html">Staff</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <div>
+      <h1>Track Your Token</h1>
+      <p>This page updates automatically every 5 seconds.</p>
+    </div>
+  </div>
+
+  <section class="card">
+    <div id="tokenBox"><p>Loading...</p></div>
+  </section>
+
+  <section class="card" id="findBox">
+    <h2>Lost your token page?</h2>
+    <p>Enter the mobile number you used to get the token.</p>
+    <input type="text" id="findMobile" placeholder="Enter mobile number">
+    <br><br>
+    <button onclick="findToken()">🔍 Find My Token</button>
+  </section>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+  let timer = null;
+
+  function getTokenId() {
+    return new URLSearchParams(location.search).get("id")
+      || localStorage.getItem("smartbankTokenId");
+  }
+
+  function statusMessage(t) {
+    switch (t.status) {
+      case "Waiting":
+        return t.ahead === 0
+          ? "You are next. Please stay nearby."
+          : `${t.ahead} customer(s) ahead of you. Estimated wait: about ${t.estimatedWait} minutes.`;
+      case "Called":
+        return `📢 Please go to Counter ${t.counter?.counterNumber || ""} now.`;
+      case "Serving":
+        return `You are being served at Counter ${t.counter?.counterNumber || ""}.`;
+      case "On Hold":
+        return "Your service is on hold. Please wait for the staff to call you again.";
+      case "Completed":
+        return "✅ Your service is completed. Thank you!";
+      case "No Show":
+        return "You were marked as No Show. Please take a new token.";
+      case "Cancelled":
+        return "This token was cancelled.";
+      default:
+        return t.status;
+    }
+  }
+
+  async function loadTrack() {
+    const box = document.getElementById("tokenBox");
+    const id = getTokenId();
+
+    if (!id) {
+      box.innerHTML = '<p>No token found. <a href="customer.html">Get a token</a> or use the box below.</p>';
+      return;
+    }
+
+    try {
+      const t = await api(`/api/tokens/${id}/track`);
+
+      const cancelBtn = t.status === "Waiting"
+        ? `<br><button onclick="cancelToken('${id}')">❌ Cancel Token</button>`
+        : "";
+
+      box.innerHTML = `
+        <div>Your Token</div>
+        <h1 style="font-size:56px; margin:10px 0;">${t.tokenNumber}</h1>
+        <p><b>${t.service?.name || ""}</b></p>
+        <p>Status: <b>${t.status}</b></p>
+        <h3 style="margin-top:15px;">${statusMessage(t)}</h3>
+        ${cancelBtn}
+      `;
+    } catch (e) {
+      box.innerHTML = `<p>${e.message}</p>`;
+    }
+  }
+
+  async function cancelToken(id) {
+    if (!confirm("Do you want to cancel this token?")) return;
+
+    try {
+      const result = await api(`/api/tokens/${id}/cancel`, { method: "PUT" });
+      alert(result.message);
+      await loadTrack();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  async function findToken() {
+    const mobile = document.getElementById("findMobile").value.trim();
+
+    if (!mobile) return alert("Please enter your mobile number.");
+
+    try {
+      const found = await api(`/api/tokens/find/${encodeURIComponent(mobile)}`);
+      localStorage.setItem("smartbankTokenId", found.id);
+      history.replaceState(null, "", `token.html?id=${found.id}`);
+      await loadTrack();
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  loadTrack();
+  timer = setInterval(loadTrack, 5000);
+</script>
+
+</body>
+</html>
