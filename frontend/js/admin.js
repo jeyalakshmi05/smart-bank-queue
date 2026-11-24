@@ -2,6 +2,22 @@
 // =====================================
 // LOAD ADMIN DASHBOARD
 // =====================================
+const adminToken = sessionStorage.getItem("smartbankToken");
+const adminUser = JSON.parse(sessionStorage.getItem("smartbankUser") || "null");
+
+if (!adminToken || !adminUser || adminUser.role !== "Admin") {
+  window.location.href = "login.html";
+  throw new Error("Not authorized");
+}
+
+
+const token = localStorage.getItem("token");
+if (!token) {
+  window.location.href = "login.html";
+  throw new Error("Not logged in");
+}
+
+
 async function loadAdmin() {
   try {
     const stats = await api("/api/queue/stats/today");
