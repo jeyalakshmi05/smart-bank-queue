@@ -1,4 +1,4 @@
-const API_BASE = "https://smart-bank-queue-1.onrender.com";
+const API_BASE = "https://smart-bank-queue.onrender.com";
 async function api(url, options = {}) {
     const token = sessionStorage.getItem("smartbankToken");
 
