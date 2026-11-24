@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Staff Dashboard - SmartBank</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">🏦 SmartBank</a>
+  <nav>
+    <a href="customer.html">Customer</a>
+    <a href="staff.html">Staff</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <div>
+      <h1>Staff Queue Dashboard</h1>
+      <p>Manage customers and handle your counter activities.</p>
+    </div>
+  </div>
+
+  <!-- STAFF DETAILS -->
+  <div class="card">
+    <h2>Staff Information</h2>
+    <p>Staff Name: <strong id="staffName">Jeyalakshmi</strong></p>
+    <p>Counter: <strong id="staffCounter">Not Selected</strong></p>
+    <p>Status: <strong id="staffStatus">Available</strong></p>
+  </div>
+
+  <!-- COUNTER MANAGEMENT -->
+  <div class="toolbar">
+    <select id="counterSelect">
+      <option value="">Select Counter</option>
+    </select>
+
+    <button onclick="callNext()">📢 Call Next</button>
+
+    <button class="secondary" onclick="loadQueue()">
+      🔄 Refresh
+    </button>
+  </div>
+
+  <!-- CURRENT CUSTOMER -->
+  <section class="card">
+    <h2>Current Customer</h2>
+    <div id="current" class="current-token">
+      No customer currently assigned.
+    </div>
+  </section>
+
+   <!-- WAITING QUEUE -->
+  <section class="card">
+    <h2>Waiting Queue</h2>
+    <div id="queue" class="table-wrap"></div>
+  </section>
+
+  <!-- ON HOLD -->
+  <section class="card">
+    <h2>On Hold</h2>
+    <div id="held" class="table-wrap"></div>
+  </section>
+
+  <!-- DAILY PERFORMANCE -->
+  <section class="card">
+    <h2>Today's Performance</h2>
+
+    <div class="dashboard-stats">
+
+      <div class="stat-card">
+        <h3 id="waitingCount">0</h3>
+        <p>Waiting Customers</p>
+      </div>
+
+      <div class="stat-card">
+        <h3 id="holdCount">0</h3>
+        <p>On Hold</p>
+      </div>
+
+      <div class="stat-card">
+        <h3 id="noShowCount">0</h3>
+        <p>No Show</p>
+      </div>
+
+      <div class="stat-card">
+        <h3 id="completedCount">0</h3>
+        <p>Completed</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STAFF AVAILABILITY -->
+  <section class="card">
+    <h2>Staff Availability</h2>
+
+    <div class="toolbar">
+      <button onclick="goOnBreak()">☕ Go on Break</button>
+      <button onclick="resumeWork()">▶ Resume Work</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+  if (checkStaffLogin()) {
+    const user = JSON.parse(
+      sessionStorage.getItem("smartbankUser")
+    );
+
+    document.getElementById("staffName").textContent =
+      user.name;
+  }
+</script>
+
+<script src="js/staff.js"></script>
+
+</body>
+</html>

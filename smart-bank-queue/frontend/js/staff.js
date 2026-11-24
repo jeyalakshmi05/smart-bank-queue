@@ -1,3 +1,17 @@
+// =====================================
+// AUTH GUARD (Staff only)
+// =====================================
+const staffToken = sessionStorage.getItem("smartbankToken");
+const staffUser = JSON.parse(sessionStorage.getItem("smartbankUser") || "null");
+
+if (!staffToken || !staffUser || staffUser.role !== "Staff") {
+    window.location.href = "login.html";
+    throw new Error("Not authorized");
+}
+
+// =====================================
+// HELPERS
+// =====================================
 function getUser() {
     return JSON.parse(sessionStorage.getItem("smartbankUser"));
 }
@@ -7,13 +21,17 @@ function priorityLabel(p) {
     if (p === 2) return "⭐ Senior Citizen";
     return "Normal";
 }
+
+// =====================================
+// LOAD COUNTER
+// =====================================
 async function loadCounters() {
     try {
         const user = getUser();
 
         if (!user || !user.counter) {
             alert("No counter assigned. Contact Admin.");
-            window.location.href = "staff-login.html";
+            window.location.href = "login.html";
             return;
         }
 
@@ -33,7 +51,9 @@ async function loadCounters() {
     }
 }
 
+// =====================================
 // CURRENT CUSTOMER
+// =====================================
 async function loadCurrent() {
     try {
         const counterId = getUser().counter._id;
@@ -73,7 +93,9 @@ async function loadCurrent() {
     }
 }
 
+// =====================================
 // WAITING QUEUE
+// =====================================
 async function loadQueue() {
     try {
         const counterId = getUser().counter._id;
@@ -86,15 +108,18 @@ async function loadQueue() {
             queue.innerHTML = `
                 <table>
                     <tr>
-                            <td>${token.service?.name || "-"}</td>
-                            <td>${priorityLabel(token.priority)}</td>
-                            <td>${token.status}</td>
+                        <th>Token</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Priority</th>
+                        <th>Status</th>
                     </tr>
                     ${tokens.map(token => `
                         <tr>
                             <td>${token.tokenNumber}</td>
                             <td>${token.customer?.name || "-"}</td>
                             <td>${token.service?.name || "-"}</td>
+                            <td>${priorityLabel(token.priority)}</td>
                             <td>${token.status}</td>
                         </tr>
                     `).join("")}
@@ -112,7 +137,9 @@ async function loadQueue() {
     }
 }
 
+// =====================================
 // ACTIONS
+// =====================================
 async function callNext() {
     try {
         const counterId = getUser().counter._id;
@@ -140,7 +167,9 @@ function holdCustomer(id) { doAction(`/api/queue/hold/${id}`, "Customer on hold"
 function noShow(id) { doAction(`/api/queue/no-show/${id}`, "Marked as No Show"); }
 function recallCustomer(id) { doAction(`/api/queue/recall/${id}`, "Customer recalled"); }
 
+// =====================================
 // STATS
+// =====================================
 async function loadStaffStats() {
     try {
         const stats = await api("/api/queue/staff-stats");
@@ -153,7 +182,9 @@ async function loadStaffStats() {
     }
 }
 
+// =====================================
 // HELD CUSTOMERS
+// =====================================
 async function loadHeld() {
     try {
         const counterId = getUser().counter._id;
@@ -190,7 +221,9 @@ async function loadHeld() {
     }
 }
 
+// =====================================
 // TRANSFER
+// =====================================
 async function transferCustomer(tokenId) {
     try {
         const counters = await api(`/api/queue/transfer-options/${tokenId}`);
@@ -226,7 +259,9 @@ async function transferCustomer(tokenId) {
     }
 }
 
+// =====================================
 // COUNTER STATUS (break / resume)
+// =====================================
 async function loadCounterStatus() {
     try {
         const info = await api("/api/queue/counter-status");
@@ -266,4 +301,7 @@ async function resumeWork() {
     }
 }
 
+// =====================================
+// START
+// =====================================
 loadCounters();
