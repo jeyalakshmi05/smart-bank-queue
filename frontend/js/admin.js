@@ -10,14 +10,6 @@ if (!adminToken || !adminUser || adminUser.role !== "Admin") {
   throw new Error("Not authorized");
 }
 
-
-const token = localStorage.getItem("token");
-if (!token) {
-  window.location.href = "login.html";
-  throw new Error("Not logged in");
-}
-
-
 async function loadAdmin() {
   try {
     const stats = await api("/api/queue/stats/today");
